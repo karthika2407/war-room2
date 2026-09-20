@@ -116,12 +116,14 @@ function PolarisConsole() {
   const [editingHazard, setEditingHazard] = useState<Hazard | null>(null);
   const [hazardDraft, setHazardDraft] = useState({ id: "", type: "Tabular", mass: "Medium", draft: "120", velocity: "1.10", lat: "-69.2500", lon: "75.5000", riv: "0" });
   const [formError, setFormError] = useState("");
+  const [manifestTime, setManifestTime] = useState("LOCAL CACHE");
 
   useEffect(() => {
     setVessel(storage("polaris-vessel", defaultVessel));
     setHazards(storage("polaris-hazards", defaultHazards));
     setWaypoints(storage("polaris-waypoints", defaultWaypoints));
     setHydrated(true);
+    setManifestTime(new Date().toISOString());
   }, [setHazards, setVessel, setWaypoints]);
 
   useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-vessel", JSON.stringify(vessel)); }, [hydrated, vessel]);
@@ -130,12 +132,12 @@ function PolarisConsole() {
 
   const manifest = useMemo(() => ({
     manifestType: "IMO POLARIS Voyage Manifest",
-    generatedAt: new Date().toISOString(),
+    generatedAt: manifestTime,
     vessel,
     seaIceConcentrationMatrix: waypoints.map(({ id, label, lat, lon, ice }) => ({ waypointId: id, label, coordinate: { lat, lon }, concentrationTenths: ice })),
     icebergTrajectoryPredictions: hazards.map(({ id, type, lat, lon, velocity, riv }) => ({ targetId: id, type, predictedPosition24h: { lat, lon }, driftVelocityKnots: velocity, riv })),
     recommendedECDISWaypoints: waypoints.map(({ id, lat, lon, fuel, risk }) => ({ id, lat, lon, estimatedFuelKg: fuel, riskIndex: risk })),
-  }), [vessel, hazards, waypoints]);
+  }), [hazards, manifestTime, vessel, waypoints]);
 
   useEffect(() => {
     if (!pipelineRunning) return;
