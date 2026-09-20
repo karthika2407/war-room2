@@ -6,9 +6,6 @@ import {
   ArrowDown,
   ArrowUp,
   Check,
-  ChevronDown,
-  CircleDot,
-  CloudSnow,
   Cpu,
   Crosshair,
   Download,
@@ -23,14 +20,11 @@ import {
   Plus,
   Radio,
   Radar,
-  RefreshCcw,
   RotateCcw,
   Search,
   Send,
   ShieldCheck,
   Ship,
-  SlidersHorizontal,
-  Sparkles,
   Target,
   Trash2,
   X,
@@ -91,14 +85,6 @@ const useClientStoredState = <T,>(fallback: T) => {
   return [value, setValue] as const;
 };
 
-function useStoredState<T>(key: string, fallback: T) {
-  const [value, setValue] = useState<T>(() => (typeof window === "undefined" ? fallback : storage(key, fallback)));
-  useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
-  return [value, setValue] as const;
-}
-
 function PolarisConsole() {
   const [vessel, setVessel] = useClientStoredState(defaultVessel);
   const [hazards, setHazards] = useClientStoredState(defaultHazards);
@@ -115,7 +101,6 @@ function PolarisConsole() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingHazard, setEditingHazard] = useState<Hazard | null>(null);
   const [hazardDraft, setHazardDraft] = useState({ id: "", type: "Tabular", mass: "Medium", draft: "120", velocity: "1.10", lat: "-69.2500", lon: "75.5000", riv: "0" });
-  const [formError, setFormError] = useState("");
   const [manifestTime, setManifestTime] = useState("LOCAL CACHE");
   const restoredRef = useRef(false);
   const [storageReady, setStorageReady] = useState(false);
