@@ -118,6 +118,7 @@ function PolarisConsole() {
   const [formError, setFormError] = useState("");
   const [manifestTime, setManifestTime] = useState("LOCAL CACHE");
   const restoredRef = useRef(false);
+  const [storageReady, setStorageReady] = useState(false);
 
   useEffect(() => {
     setVessel(storage("polaris-vessel", defaultVessel));
@@ -125,12 +126,13 @@ function PolarisConsole() {
     setWaypoints(storage("polaris-waypoints", defaultWaypoints));
     setHydrated(true);
     restoredRef.current = true;
+    setStorageReady(true);
     setManifestTime(new Date().toISOString());
   }, [setHazards, setVessel, setWaypoints]);
 
-  useEffect(() => { if (hydrated && restoredRef.current) window.localStorage.setItem("polaris-vessel", JSON.stringify(vessel)); }, [hydrated, vessel]);
-  useEffect(() => { if (hydrated && restoredRef.current) window.localStorage.setItem("polaris-hazards", JSON.stringify(hazards)); }, [hazards, hydrated]);
-  useEffect(() => { if (hydrated && restoredRef.current) window.localStorage.setItem("polaris-waypoints", JSON.stringify(waypoints)); }, [hydrated, waypoints]);
+  useEffect(() => { if (storageReady && restoredRef.current) window.localStorage.setItem("polaris-vessel", JSON.stringify(vessel)); }, [storageReady, vessel]);
+  useEffect(() => { if (storageReady && restoredRef.current) window.localStorage.setItem("polaris-hazards", JSON.stringify(hazards)); }, [hazards, storageReady]);
+  useEffect(() => { if (storageReady && restoredRef.current) window.localStorage.setItem("polaris-waypoints", JSON.stringify(waypoints)); }, [storageReady, waypoints]);
 
   const manifest = useMemo(() => ({
     manifestType: "IMO POLARIS Voyage Manifest",
