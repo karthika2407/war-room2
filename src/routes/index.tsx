@@ -36,7 +36,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
@@ -117,18 +117,20 @@ function PolarisConsole() {
   const [hazardDraft, setHazardDraft] = useState({ id: "", type: "Tabular", mass: "Medium", draft: "120", velocity: "1.10", lat: "-69.2500", lon: "75.5000", riv: "0" });
   const [formError, setFormError] = useState("");
   const [manifestTime, setManifestTime] = useState("LOCAL CACHE");
+  const restoredRef = useRef(false);
 
   useEffect(() => {
     setVessel(storage("polaris-vessel", defaultVessel));
     setHazards(storage("polaris-hazards", defaultHazards));
     setWaypoints(storage("polaris-waypoints", defaultWaypoints));
     setHydrated(true);
+    restoredRef.current = true;
     setManifestTime(new Date().toISOString());
   }, [setHazards, setVessel, setWaypoints]);
 
-  useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-vessel", JSON.stringify(vessel)); }, [hydrated, vessel]);
-  useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-hazards", JSON.stringify(hazards)); }, [hazards, hydrated]);
-  useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-waypoints", JSON.stringify(waypoints)); }, [hydrated, waypoints]);
+  useEffect(() => { if (hydrated && restoredRef.current) window.localStorage.setItem("polaris-vessel", JSON.stringify(vessel)); }, [hydrated, vessel]);
+  useEffect(() => { if (hydrated && restoredRef.current) window.localStorage.setItem("polaris-hazards", JSON.stringify(hazards)); }, [hazards, hydrated]);
+  useEffect(() => { if (hydrated && restoredRef.current) window.localStorage.setItem("polaris-waypoints", JSON.stringify(waypoints)); }, [hydrated, waypoints]);
 
   const manifest = useMemo(() => ({
     manifestType: "IMO POLARIS Voyage Manifest",
