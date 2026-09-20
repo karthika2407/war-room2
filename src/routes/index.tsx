@@ -200,8 +200,8 @@ function PolarisConsole() {
           <Metric label="Tracked Targets" value={String(hazards.length).padStart(2, "0")} sub="3 correlated / 1 new return" icon={<Target />} tone="red" />
         </section>
 
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(420px,0.9fr)]">
-          <div className="space-y-5">
+        <div className="grid min-w-0 gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(420px,0.9fr)]">
+          <div className="min-w-0 space-y-5">
             <section className="panel overflow-hidden">
               <PanelHeader icon={<Crosshair />} eyebrow="Mission planning / 01" title="Bridge mission planner" action={<Badge className="border-primary/40 bg-primary/10 text-primary">LOCAL STATE SYNCED</Badge>} />
               <div className="grid gap-5 p-4 lg:grid-cols-[1fr_0.9fr]">
@@ -238,7 +238,7 @@ function PolarisConsole() {
             </section>
           </div>
 
-          <div className="space-y-5">
+          <div className="min-w-0 space-y-5">
             <section className="panel overflow-hidden">
               <PanelHeader icon={<Gauge />} eyebrow="Command analytics / live model" title={mode === "bridge" ? "Bridge tactical picture" : "Shore fleet overview"} action={<Badge className="border-ice/30 bg-ice/10 text-ice">{mode === "bridge" ? "VESSEL VIEW" : "GOA HQ"}</Badge>} />
               <div className="grid gap-4 p-4 sm:grid-cols-2"><ChartPanel title="Fuel penalty / ice concentration" subtitle="MGO kg per nautical mile"><ResponsiveContainer width="100%" height={185}><AreaChart data={fuelCurve}><defs><linearGradient id="fuelFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.35} /><stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0} /></linearGradient></defs><CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" /><XAxis dataKey="ice" stroke="var(--color-muted-foreground)" fontSize={10} /><YAxis stroke="var(--color-muted-foreground)" fontSize={10} /><Tooltip contentStyle={{ background: "var(--color-navy)", border: "1px solid var(--color-line)", color: "var(--color-foreground)", fontSize: 11 }} /><Area type="monotone" dataKey="polaris" stroke="var(--color-primary)" fill="url(#fuelFill)" strokeWidth={2} /><Line type="monotone" dataKey="baseline" stroke="var(--color-muted-foreground)" strokeDasharray="4 4" dot={false} /></AreaChart></ResponsiveContainer><div className="flex justify-between font-mono text-[9px] text-muted-foreground"><span>— POLARIS vector</span><span>— baseline</span></div></ChartPanel><ChartPanel title="24h drift trajectory variance" subtitle="Predicted variance / nautical miles"><ResponsiveContainer width="100%" height={185}><LineChart data={driftCurve}><CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" /><XAxis dataKey="hour" stroke="var(--color-muted-foreground)" fontSize={10} /><YAxis stroke="var(--color-muted-foreground)" fontSize={10} /><Tooltip contentStyle={{ background: "var(--color-navy)", border: "1px solid var(--color-line)", color: "var(--color-foreground)", fontSize: 11 }} /><Line type="monotone" dataKey="standard" stroke="var(--color-amber)" strokeWidth={2} dot={false} /><Line type="monotone" dataKey="polaris" stroke="var(--color-ice)" strokeWidth={2} dot={false} /></LineChart></ResponsiveContainer><div className="flex justify-between font-mono text-[9px] text-muted-foreground"><span>— linear drift</span><span>— POLARIS AI</span></div></ChartPanel></div>
