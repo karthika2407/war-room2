@@ -165,13 +165,21 @@ function PolarisConsole() {
 
   const addTelemetry = () => {
     const id = `ICE-${String(43 + hazards.length).padStart(3, "0")}`;
-    setHazards((current) => [{ id, type: "Tabular", mass: "Medium", draft: 146, velocity: 1.14, lat: "-69.6712", lon: "75.4802", riv: -1, status: "Evasive", updated: new Date().toLocaleTimeString("en-GB", { hour12: false }) }, ...current]);
+    setHazards((current) => {
+      const updated = [{ id, type: "Tabular", mass: "Medium", draft: 146, velocity: 1.14, lat: "-69.6712", lon: "75.4802", riv: -1, status: "Evasive", updated: new Date().toLocaleTimeString("en-GB", { hour12: false }) }, ...current];
+      window.localStorage.setItem("polaris-hazards", JSON.stringify(updated));
+      return updated;
+    });
     setLogs((current) => [`[RADAR] Target ${id} correlated from Sentinel-1 SAR return.`, ...current].slice(0, 7));
   };
   const saveHazard = () => {
     if (!hazardDraft.id || Number(hazardDraft.draft) <= 0) return;
     const next: Hazard = { ...hazardDraft, draft: Number(hazardDraft.draft), velocity: Number(hazardDraft.velocity), riv: Number(hazardDraft.riv), status: Number(hazardDraft.riv) < 0 ? "Evasive" : Number(hazardDraft.riv) > 2 ? "Safe" : "Monitor", updated: new Date().toLocaleTimeString("en-GB", { hour12: false }) };
-    setHazards((current) => editingHazard ? current.map((item) => item.id === editingHazard.id ? next : item) : [next, ...current]);
+    setHazards((current) => {
+      const updated = editingHazard ? current.map((item) => item.id === editingHazard.id ? next : item) : [next, ...current];
+      window.localStorage.setItem("polaris-hazards", JSON.stringify(updated));
+      return updated;
+    });
     setEditingHazard(null);
     setHazardDraft({ id: "", type: "Tabular", mass: "Medium", draft: "120", velocity: "1.10", lat: "-69.2500", lon: "75.5000", riv: "0" });
   };
