@@ -36,7 +36,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
@@ -249,10 +249,11 @@ function PolarisConsole() {
 const pipelineLabels = ["Ingesting Sentinel-1 SAR & CMEMS", "Hydrodynamic drift model", "IMO POLARIS RIV calculation", "Fuel-optimal safe route"];
 
 function Metric({ label, value, sub, icon, tone }: { label: string; value: string; sub: string; icon: React.ReactNode; tone: "teal" | "amber" | "ice" | "red" }) {
-  return <div className="panel flex items-center gap-4 p-4"><div className={`flex h-10 w-10 items-center justify-center border bg-${tone}/10 text-${tone} border-${tone}/30`}>{icon}</div><div className="min-w-0"><div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{label}</div><div className="truncate text-lg font-semibold">{value}</div><div className="truncate text-[10px] text-muted-foreground">{sub}</div></div></div>;
+  const toneClasses = { teal: "border-teal/30 bg-teal/10 text-teal", amber: "border-amber/30 bg-amber/10 text-amber", ice: "border-ice/30 bg-ice/10 text-ice", red: "border-danger/30 bg-danger/10 text-danger" }[tone];
+  return <div className="panel flex items-center gap-4 p-4"><div className={`flex h-10 w-10 items-center justify-center border ${toneClasses}`}>{icon}</div><div className="min-w-0"><div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{label}</div><div className="truncate text-lg font-semibold">{value}</div><div className="truncate text-[10px] text-muted-foreground">{sub}</div></div></div>;
 }
-function PanelHeader({ icon, eyebrow, title, action }: { icon: React.ReactNode; eyebrow: string; title: string; action?: React.ReactNode }) { return <div className="flex flex-wrap items-center gap-3 border-b border-line p-4"><div className="text-primary">{icon}</div><div className="mr-auto"><div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{eyebrow}</div><h2 className="mt-1 text-base font-semibold tracking-tight">{title}</h2></div>{action}</div>; }
-function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block"><span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{label}</span>{children}</label>; }
+function PanelHeader({ icon, eyebrow, title, action }: { icon: ReactNode; eyebrow: string; title: string; action?: ReactNode }) { return <div className="flex flex-wrap items-center gap-3 border-b border-line p-4"><div className="text-primary">{icon}</div><div className="mr-auto"><div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{eyebrow}</div><h2 className="mt-1 text-base font-semibold tracking-tight">{title}</h2></div>{action}</div>; }
+function Field({ label, children }: { label: string; children: ReactNode }) { return <label className="block"><span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">{label}</span>{children}</label>; }
 function Telemetry({ label, value }: { label: string; value: string }) { return <div><div className="font-mono text-[9px] uppercase text-muted-foreground">{label}</div><div className="mt-1 font-mono text-sm text-foreground">{value}</div></div>; }
-function ChartPanel({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) { return <div className="min-w-0 border border-line bg-surface p-3"><div className="mb-1 text-xs font-semibold">{title}</div><div className="mb-2 font-mono text-[9px] text-muted-foreground">{subtitle}</div>{children}</div>; }
+function ChartPanel({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) { return <div className="min-w-0 border border-line bg-surface p-3"><div className="mb-1 text-xs font-semibold">{title}</div><div className="mb-2 font-mono text-[9px] text-muted-foreground">{subtitle}</div>{children}</div>; }
 function StatusStat({ label, value, tone }: { label: string; value: string; tone: string }) { return <div className="p-3 text-center"><div className={`font-mono text-sm font-semibold ${tone}`}>{value}</div><div className="mt-1 text-[9px] uppercase tracking-[0.1em] text-muted-foreground">{label}</div></div>; }
