@@ -1,5 +1,5 @@
-- [ ] Replace starter page with POLARIS-AI tactical command console
-- [ ] Add persistent local vessel, hazard, and waypoint state with CRUD
-- [ ] Add radar telemetry simulator and hydrodynamic pipeline controls
-- [ ] Add analytics charts, role switcher, hazard log, and JSON export preview
-- [ ] Verify the live preview at desktop and mobile widths
+- [x] Replace starter page with POLARIS-AI tactical command console
+- [x] Add persistent local vessel, hazard, and waypoint state with CRUD
+- [x] Add radar telemetry simulator and hydrodynamic pipeline controls
+- [x] Add analytics charts, role switcher, hazard log, and JSON export preview
+- [x] Verify the live preview at desktop and mobile widths
