@@ -1,6 +1,6 @@
 @import "tailwindcss" source(none);
 @source "../src";
-@source inline("bg-teal/10 bg-amber/10 bg-ice/10 bg-danger/10 text-teal text-amber text-ice text-danger border-teal/30 border-amber/30 border-ice/30 border-danger/30");
+@source inline("bg-teal/10 bg-amber/10 bg-ice/10 bg-danger/10 text-teal text-amber text-ice text-danger border-teal/30 border-amber/30 border-ice/30 border-danger/30 text-primary");
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

@@ -86,6 +86,11 @@ const storage = <T,>(key: string, fallback: T) => {
   }
 };
 
+const useClientStoredState = <T,>(fallback: T) => {
+  const [value, setValue] = useState(fallback);
+  return [value, setValue] as const;
+};
+
 function useStoredState<T>(key: string, fallback: T) {
   const [value, setValue] = useState<T>(() => (typeof window === "undefined" ? fallback : storage(key, fallback)));
   useEffect(() => {
@@ -95,9 +100,10 @@ function useStoredState<T>(key: string, fallback: T) {
 }
 
 function PolarisConsole() {
-  const [vessel, setVessel] = useStoredState("polaris-vessel", defaultVessel);
-  const [hazards, setHazards] = useStoredState("polaris-hazards", defaultHazards);
-  const [waypoints, setWaypoints] = useStoredState("polaris-waypoints", defaultWaypoints);
+  const [vessel, setVessel] = useClientStoredState(defaultVessel);
+  const [hazards, setHazards] = useClientStoredState(defaultHazards);
+  const [waypoints, setWaypoints] = useClientStoredState(defaultWaypoints);
+  const [hydrated, setHydrated] = useState(false);
   const [mode, setMode] = useState<"bridge" | "shore">("bridge");
   const [pipelineStep, setPipelineStep] = useState(3);
   const [pipelineRunning, setPipelineRunning] = useState(false);
@@ -110,6 +116,17 @@ function PolarisConsole() {
   const [editingHazard, setEditingHazard] = useState<Hazard | null>(null);
   const [hazardDraft, setHazardDraft] = useState({ id: "", type: "Tabular", mass: "Medium", draft: "120", velocity: "1.10", lat: "-69.2500", lon: "75.5000", riv: "0" });
   const [formError, setFormError] = useState("");
+
+  useEffect(() => {
+    setVessel(storage("polaris-vessel", defaultVessel));
+    setHazards(storage("polaris-hazards", defaultHazards));
+    setWaypoints(storage("polaris-waypoints", defaultWaypoints));
+    setHydrated(true);
+  }, [setHazards, setVessel, setWaypoints]);
+
+  useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-vessel", JSON.stringify(vessel)); }, [hydrated, vessel]);
+  useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-hazards", JSON.stringify(hazards)); }, [hazards, hydrated]);
+  useEffect(() => { if (hydrated) window.localStorage.setItem("polaris-waypoints", JSON.stringify(waypoints)); }, [hydrated, waypoints]);
 
   const manifest = useMemo(() => ({
     manifestType: "IMO POLARIS Voyage Manifest",
