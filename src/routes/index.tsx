@@ -190,6 +190,10 @@ function PolarisConsole() {
   const startEdit = (hazard: Hazard) => { setEditingHazard(hazard); setHazardDraft({ ...hazard, draft: String(hazard.draft), velocity: String(hazard.velocity), riv: String(hazard.riv) }); };
   const downloadManifest = () => { const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const anchor = document.createElement("a"); anchor.href = url; anchor.download = "polaris-imo-voyage-manifest.json"; anchor.click(); URL.revokeObjectURL(url); };
 
+  if (!hydrated) {
+    return <main className="flex min-h-screen items-center justify-center bg-background font-mono text-xs uppercase tracking-[0.2em] text-primary">Restoring local mission cache...</main>;
+  }
+
   return (
     <main className="min-h-screen bg-background text-foreground selection:bg-primary/30">
       <header className="sticky top-0 z-30 border-b border-line bg-background/95 backdrop-blur">
